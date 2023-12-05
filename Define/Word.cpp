@@ -17,22 +17,24 @@ Word::Word(const string &name, const string &type, const string &meaning, const 
     this->example = example;
 }
 
+Word::~Word(){}
+
 string Word::getName() const
 {
     return name;
 }
 
- string Word::getType() const
+string Word::getType() const
 {
     return type;
 }
 
- string Word::getMeaning() const
+string Word::getMeaning() const
 {
     return meaning;
 }
 
- string Word::getExample() const
+string Word::getExample() const
 {
     return example;
 }

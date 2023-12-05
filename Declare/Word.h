@@ -1,13 +1,7 @@
 #pragma once
 #ifndef WORD_H
 #define WORD_H
-#include <iostream>
-#include <windows.h>
-#include <string.h>
-#include <algorithm>
-#include <conio.h>
-#include <ctype.h>
-using namespace std;
+#include "../Define/Graphic.cpp"
 
 class Word
 {
@@ -20,6 +14,7 @@ private:
 public:
     Word();
     Word(const string &name, const string &type, const string &meaning, const string &example);
+    ~Word();
     string getName() const;
     string getType() const;
     string getMeaning() const;

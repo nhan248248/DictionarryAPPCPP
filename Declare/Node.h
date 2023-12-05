@@ -5,17 +5,25 @@
 
 class Node
 {
-public:
-    //proverties
+private:
+    // proverties
+    string key;
     Word data;
     Node *next;
     Node *prev;
 
 public:
-    //methods
-    //Node();
+    // methods
+    Node();
     Node(const Word &word);
-    ~Node();
+    string getKey() const;
+    void setKey(const string &newKey);
+    Word getData() const;
+    void setData(const Word &newData);
+    Node *getNext() const;
+    void setNext(Node *newNext);
+    Node *getPrev() const;
+    void setPrev(Node *newPrev);
 };
 
 #endif

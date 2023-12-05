@@ -2,26 +2,32 @@
 #ifndef DOUBLYLINKEDLIST_H
 #define DOUBLYLINKEDLIST_H
 
-#include"../Define/Node.cpp"
+#include "../Define/Node.cpp"
 
+class DoublyLinkedList
+{
+private:
+  Node *head;
+  Node *tail;
 
-class DoublyLinkedList {
+public:
+  DoublyLinkedList();
+  DoublyLinkedList(Node *n);
+  ~DoublyLinkedList();
 
-  public:
-    Node * head;
-    Node * tail;
-    DoublyLinkedList();
-    DoublyLinkedList(Node * n);
-    ~DoublyLinkedList();
+  bool isEmpty() const;
+  void append(const Word &word);
+  Word at(int index);
+  int size() const;
+  
+  void swapNodes(DoublyLinkedList *list, int i, int j);
+  bool compareFirstLetter(const Word &word1, const Word &word2);
+  void quickSort(DoublyLinkedList *listWords, int left, int right);
 
-    bool isEmpty() const;
-    void append(const Word& word);
-    Word at(int index);
-    int size() const;
-    void swapNodes(DoublyLinkedList* list, int i, int j);
-    bool compareFirstLetter(const Word& word1, const Word& word2);
-    void quickSort(DoublyLinkedList* listWords, int left, int right);
+  Node *getHead() const;
+  void setHead(Node *newHead);
+  Node *getTail() const;
+  void setTail(Node *newTail);
 };
-
 
 #endif

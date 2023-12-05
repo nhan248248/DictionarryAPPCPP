@@ -1,9 +1,8 @@
 #include "Define/Dictionary.cpp"
 
-int main() {
+int main()
+{
     Dictionary x;
     getchar();
     return 0;
 }
-
-

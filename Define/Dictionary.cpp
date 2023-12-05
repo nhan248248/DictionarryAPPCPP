@@ -16,836 +16,829 @@ Dictionary::Dictionary()
     wordTable.insert(Word("Word", "Danh từ", "Từ", "i am writing some words."));
     wordTable.insert(Word("Run", "Động từ", "Chạy", "I am running on the road."));
     wordTable.insert(Word("Cute", "Tính từ", "Dễ thương", "You are so cute!."));
-    
+    wordTable.insert(Word("Sun", "Danh từ", "Mặt trời", "The sun is shining."));
+    wordTable.insert(Word("Moon", "Danh từ", "Mặt trăng", "The moon is full tonight."));
+    wordTable.insert(Word("River", "Danh từ", "Sông", "The river flows through the valley."));
+    wordTable.insert(Word("Forest", "Danh từ", "Rừng", "The forest is home to many animals."));
+    wordTable.insert(Word("Rain", "Danh từ", "Mưa", "I love the sound of rain."));
+    wordTable.insert(Word("Sky", "Danh từ", "Bầu trời", "The sky is clear and blue."));
+    wordTable.insert(Word("Star", "Danh từ", "Ngôi sao", "Each star in the sky is unique."));
+    wordTable.insert(Word("Wind", "Danh từ", "Gió", "The wind is blowing gently."));
+    wordTable.insert(Word("Fire", "Danh từ", "Lửa", "They gathered around the fire."));
+    wordTable.insert(Word("Book", "Danh từ", "Sách", "She enjoys reading a good book."));
+
     mainMenu();
 }
 Dictionary::~Dictionary()
 {
-
 }
 
-void Dictionary::checkBug(){
-    gotoxy(0, 0);
-    cout << "Lỗi ở đây" << endl;
-    system("pause");
-}
+void Dictionary::mainMenu()
+{
 
-void Dictionary::mainMenu(){
-    int choose = choice();
-    if(choose == TU_DIEN){
-        clscr();
+    short choose = choice();
+    if (choose == TU_DIEN)
+    {
+        Graphic::clscr();
         dictionaryMenu();
     }
-    else if(choose == GIOI_THIEU){
-        resetBackgroundColor();
-        system("cls");
+    else if (choose == GIOI_THIEU)
+    {
+        Graphic::resetColor();
+        Graphic::clscr();
         introduction();
     }
-    else{
+    else
+    {
+        Graphic::clscr();
         exit(0);
     }
 }
 
-void Dictionary::introduction(){
+void Dictionary::introduction()
+{
     int x = 50, y = 2;
     int choose;
-    gotoxy(x, y - 1);
+    Graphic::gotoxy(x, y - 1);
     do
     {
-        clscr();
-        setUTF8CodePage();
+        Graphic::clscr();
+        Graphic::setUTF8CodePage();
         cout << "TỪ ĐIỂN ANH VIỆT";
-        gotoxy(x - 18, y + 1);
+        Graphic::gotoxy(x - 18, y + 1);
         cout << "===========================================================";
-        gotoxy(x - 18, y + 3);
+        Graphic::gotoxy(x - 18, y + 3);
         cout << "Tác giả: ";
-        gotoxy(x - 18, y + 4);
+        Graphic::gotoxy(x - 18, y + 4);
         cout << "LÊ VĂN NHÀN";
-        gotoxy(x - 18, y + 5);
+        Graphic::gotoxy(x - 18, y + 5);
         cout << "NGUYỄN THỊ NGÂN ANH" << endl;
 
         cout << "\t\t\t\tNội dung" << endl;
         cout << "\t\t\t\tNội dung" << endl;
 
-        gotoxy(x - 3, y + 30);
+        Graphic::gotoxy(x - 3, y + 30);
         cout << "Nhấn phím ESC để quay trở lại....";
-        setDefaultCodePage();
-        choose = getInputKey();
+        Graphic::setDefaultCodePage();
+        choose = Graphic::getInputKey();
         Sleep(TIME_DELAY);
     } while (choose != KEY_EXIT);
-    clscr();
+    Graphic::clscr();
     mainMenu();
 }
 
 void Dictionary::dictionaryMenu()
 {
     int choose;
-    int index = 0;
+    int currentWord = 0, currentPage = 0, wordIndex = 0;
     int x = 15, y = 7;
-    const int size = 10;
+    int numbersWordInPage = 0;
+
+    Graphic::displayBackgroundColor();
+    mainBox();
+    // displayListKey(index, x, y);
+    // wordSelected(index);
+
     do
     {
-        mainBox();
-        displayListKey(index, size, x, y);
-        displayNumberOfWord();
-        wordSelected(index);
-        choose = getInputKey();
+        wordIndex = currentPage * NUMBER_TO_VIEW + currentWord;
+        numbersWordInPage = (wordIndex / NUMBER_TO_VIEW == 0) ? NUMBER_TO_VIEW : wordTable.listKey()->size() % NUMBER_TO_VIEW;
+        displayStatus(wordIndex, currentPage);
+        displayListKey(currentWord, currentPage, x, y);
+        wordSelected(wordIndex);
+        choose = Graphic::getInputKey();
 
-        if(choose == KEY_UP){
-            if(index > 0){
-                index--;
+        if (choose == KEY_UP)
+        {
+            if (currentWord > 0)
+            {
+                currentWord--;
             }
-            else if(index == 0){
-                index = size - 1;
-            }
-        }
-        else if(choose == KEY_DOWN){
-            if(index < size - 1){
-                index++;
-            }
-            else if(index == size - 1){
-                index = 0;
+            else if (currentWord == 0)
+            {
+                currentWord = numbersWordInPage - 1;
             }
         }
-        else if(choose == KEY_ADD){
-            clscr();
+        else if (choose == KEY_DOWN)
+        {
+            if (currentWord < numbersWordInPage - 1)
+            {
+                currentWord++;
+            }
+            else if (currentWord == numbersWordInPage - 1)
+            {
+                currentWord = 0;
+            }
+        }
+        else if (choose == KEY_LEFT)
+        {
+            if (currentPage < numbersOfPage() - 1)
+            {
+                currentPage++;
+                currentWord = 0;
+            }
+            else if (currentPage == numbersOfPage() - 1)
+            {
+                currentPage = 0;
+                currentWord = 0;
+            }
+        }
+        else if (choose == KEY_RIGHT)
+        {
+            if (currentPage < numbersOfPage() - 1)
+            {
+                currentPage++;
+                currentWord = 0;
+            }
+            else if (currentPage == numbersOfPage() - 1)
+            {
+                currentPage = 0;
+                currentWord = 0;
+            }
+        }
+        else if (choose == KEY_ADD)
+        {
+            Graphic::clscr();
             addWord();
-            clscr();
+            Graphic::clscr();
+            dictionaryMenu();
         }
-        else if (choose == KEY_UPDATE){
-            clscr();
+        else if (choose == KEY_UPDATE)
+        {
+            Graphic::clscr();
+            Graphic::displayBackgroundColor();
             update();
-            clscr();
+            Graphic::clscr();
+            dictionaryMenu();
         }
-        else if (choose == KEY_DELETE){
-            clscr();
+        else if (choose == KEY_DELETE)
+        {
+            Graphic::clscr();
+            Graphic::displayBackgroundColor();
             deleteWord();
-            clscr();
+            Graphic::clscr();
+            dictionaryMenu();
         }
-        else if (choose == KEY_SEARCH){
-            clscr();
+        else if (choose == KEY_SEARCH)
+        {
+            Graphic::clscr();
+            Graphic::displayBackgroundColor();
+            displayStatus(wordIndex, currentPage);
             search();
-            clscr();
+            Graphic::clscr();
+            dictionaryMenu();
         }
-        else if(choose == KEY_SPEAK_WORD){
-            string text = wordTable.listKey()->at(index).getName();
+        else if (choose == KEY_SPEAK_WORD)
+        {
+            string text = wordTable.listKey()->at(wordIndex).getName();
             speak(text);
             continue;
         }
-        else if(choose == KEY_SPEAK_EXAMPLE){
-            string text = wordTable.listKey()->at(index).getExample();
+        else if (choose == KEY_SPEAK_EXAMPLE)
+        {
+            string text = wordTable.listKey()->at(wordIndex).getExample();
             speak(text);
             continue;
         }
         Sleep(TIME_DELAY);
     } while (choose != KEY_EXIT);
+    // Graphic::resetColor();
+    Graphic::clscr();
     mainMenu();
 }
-//1. Chức năng thêm từ
+// 1. Chức năng thêm từ
 void Dictionary::addWord()
 {
     Word word;
-    string s;
+    string s = "";
+    Graphic::displayBackgroundColor();
     createBox(40, 10, 40, 16);
-
-    setConsoleTextColor(3);
-    setUTF8CodePage();
+    Graphic::setUTF8CodePage();
     // Nhập tên từ
-    do {
-        gotoxy(42, 11);
+    do
+    {
+        Graphic::gotoxy(42, 11);
+        Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Tên từ: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
         fflush(stdin);
         getline(cin, s);
     } while (s.empty());
     word.setName(s);
 
     // Nhập loại từ
-    do {
-        gotoxy(42, 12);
+    do
+    {
+        Graphic::gotoxy(42, 12);
+        Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Loại từ: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
         fflush(stdin);
         getline(cin, s);
     } while (s.empty());
     word.setType(s);
 
     // Nhập nghĩa
-    do {
-        gotoxy(42, 13);
+    do
+    {
+        Graphic::gotoxy(42, 13);
+        Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Nghĩa: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
         fflush(stdin);
         getline(cin, s);
     } while (s.empty());
     word.setMeaning(s);
 
     // Nhập ví dụ
-    do {
-        gotoxy(42, 14);
+    do
+    {
+        Graphic::gotoxy(42, 14);
+        Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Ví dụ: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
         fflush(stdin);
         getline(cin, s);
     } while (s.empty());
     word.setExample(s);
-    //checkBug();
-    wordTable.insert(word);
-    showMessageBox("Thêm từ thành công!", "Thông báo", 0);
-    setDefaultCodePage();
+
+    if (!wordTable.keyFound(word.getName()))
+    {
+        wordTable.insert(word);
+        Graphic::showMessageBox("Thêm từ thành công!", "Thông báo", 0);
+    }
+    else
+    {
+        Graphic::showMessageBox("Từ bạn vừa nhập đã có trong danh sách vui lòng nhập lại", "Lỗi!!!", 0);
+        Graphic::setDefaultCodePage();
+        Graphic::clscr();
+        addWord();
+    }
+    Graphic::setDefaultCodePage();
 }
-//2. Chức năng sửa
-void Dictionary::update(){
+// 2. Chức năng sửa
+void Dictionary::update()
+{
     createBox(40, 10, 40, 16);
-
-    setUTF8CodePage();
-    gotoxy(50, 2);
+    Graphic::setUTF8CodePage();
     
+    Graphic::gotoxy(50, 2);
     cout << "Sửa từ ở đây";
-
-    showMessageBox("Đã sửa", "Thông báo", 0);
-    setDefaultCodePage();
-}
-//3. Chức năng Xóa
-void Dictionary::deleteWord(){
-    setUTF8CodePage();
-
-    cout << "Hành động xoá";
     
-    showMessageBox("Đã xóa", "Thông báo", utf8CodePage);
-    setDefaultCodePage();
+    
+    Graphic::showMessageBox("Đã sửa", "Thông báo", 0);
+    Graphic::setDefaultCodePage();
 }
-//4. Chức năng tìm kiếm
+// 3. Chức năng Xóa
+void Dictionary::deleteWord()
+{
+    Graphic::setUTF8CodePage();
+    
+    Graphic::gotoxy(50, 2);
+    cout << "Hành động xoá";
 
-//Hàm kiểm trả về danh sách từ chứa chuỗi được nhập vào
-DoublyLinkedList Dictionary::searchInList(const string& query, DoublyLinkedList* dataList) {
+    
+    Graphic::showMessageBox("Đã xóa", "Thông báo", 0);
+    Graphic::setDefaultCodePage();
+}
+// 4. Chức năng tìm kiếm
+
+// Hàm kiểm trả về danh sách từ chứa chuỗi được nhập vào
+DoublyLinkedList Dictionary::searchInList(const string &query, DoublyLinkedList *dataList)
+{
     DoublyLinkedList results;
 
     // Chuyển đổi query thành chữ thường để tìm kiếm không phân biệt chữ hoa thường
     string lowercaseQuery = query;
     transform(lowercaseQuery.begin(), lowercaseQuery.end(), lowercaseQuery.begin(), ::tolower);
 
-    Node* current = dataList->head;
+    Node *current = dataList->getHead();
 
-    while (current != nullptr) {
-        const auto& item = current->data;
+    while (current != nullptr)
+    {
+        const auto &item = current->getData();
         // Chuyển đổi tên từ thành chữ thường để so sánh
         string lowercaseName = item.getName();
         transform(lowercaseName.begin(), lowercaseName.end(), lowercaseName.begin(), ::tolower);
 
-        if (lowercaseName.find(lowercaseQuery) != string::npos) {
+        if (lowercaseName.find(lowercaseQuery) != string::npos)
+        {
             results.append(item);
         }
-        current = current->next;
+        current = current->getNext();
     }
 
     return results;
 }
 
-bool Dictionary::isExit(const string& query, DoublyLinkedList* list){
-    string lowercaseQuery = query;
-    transform(lowercaseQuery.begin(), lowercaseQuery.end(), lowercaseQuery.begin(), ::tolower);
-
-    Node* current = list->head;
-    bool check = false;
-
-    while (current != nullptr) {
-        const auto& item = current->data;
-        // Chuyển đổi tên từ thành chữ thường để so sánh
-        string lowercaseName = item.getName();
-        transform(lowercaseName.begin(), lowercaseName.end(), lowercaseName.begin(), ::tolower);
-
-        if (lowercaseName == lowercaseQuery) {
-            check = true;
-            break; // Nếu tìm thấy khớp, thoát vòng lặp ngay lập tức
-        }
-        current = current->next;
-    }
-    return check;
-}
-
-
-//Hàm tìm từ và hiển thị danh sách từ chứa ký tự được nhập
-void Dictionary::search(){
-    //Vị trí nhập
-    int x_Input = 12, y_Input = 6;
+// Hàm tìm từ và hiển thị danh sách từ chứa ký tự được nhập
+void Dictionary::search()
+{
+    Sleep(100);
+    // Vị trí nhập
+    short x_Input = 12, y_Input = 6;
     // Vị trí xuất danh sách
-    int x_List = 15, y_List = 9;
+    short x_List = 15, y_List = 9;
     // Vị trí xuất chi tiết từ
-    int x_Detail = 43, y_Detail = 9;
-    //Vị trí con trỏ nhập
-    int x_Point = 6;
-
-    displayNumberOfWord();
+    short x_Detail = 43, y_Detail = 9;
+    // Vị trí con trỏ nhập
+    short x_Point = 6;
 
     char key;
     string userInput = "";
 
-    //getchar();
-    searchBox();
+    // getchar();
 
-    setUTF8CodePage();
-    for(int i = 0; i < 10; i++){
-        label(wordTable.listKey()->at(i).getName(), x_List, y_List + i, DEFAULT_TEXT_COLOR);
+    Graphic::setUTF8CodePage();
+    for (int i = 0; i < NUMBER_TO_VIEW - 2; i++)
+    {
+        Graphic::label(wordTable.listKey()->at(i).getName(), x_List, y_List + i, list_Key_Color);
     }
-    
-    gotoxy(x_Input, y_Input);
+
+    Graphic::gotoxy(x_Input, y_Input);
     cout << "Nhập: ";
-    setDefaultCodePage();
-    
-    do{
-        
-        gotoxy(x_Input + x_Point, y_Input);
+    Graphic::setDefaultCodePage();
+
+    do
+    {
+        searchBox();
+        Graphic::gotoxy(x_Input + x_Point, y_Input);
         fflush(stdin);
         key = _getch();
-        
-        //Xóa từng ký tự trong chuỗi vừa nhập
-        if(key == '\b'){
-            if(!userInput.empty()){
+
+        // Xóa từng ký tự trong chuỗi vừa nhập
+        if (key == '\b')
+        {
+            if (!userInput.empty())
+            {
                 x_Point--;
                 userInput.pop_back();
             }
         }
 
-        if(isalpha(key)){
+        if (isalpha(key))
+        {
             userInput += key;
             x_Point++;
         }
 
         DoublyLinkedList searchResults = searchInList(userInput, wordTable.listKey());
-        if(key == 9){
+        if (key == 59)
+        {
             string text = searchResults.at(0).getName();
             speak(text);
             continue;
         }
-        else if(key == 17){
+        else if (key == 60)
+        {
             string text = searchResults.at(0).getExample();
             speak(text);
             continue;
         }
-        
-        //Làm sạch chỗ nhập và hiển thị chuỗi vừa nhập
-        gotoxy(x_Input + 6, y_Input);
-        cout << "                  ";
-        gotoxy(x_Input + 6, y_Input);
-        setConsoleTextColor(220);
+
+        // Làm sạch chỗ nhập và hiển thị chuỗi vừa nhập
+        Graphic::gotoxy(x_Input + 6, y_Input);
+        cout << "                      ";
+        Graphic::gotoxy(x_Input + 6, y_Input);
+        Graphic::setConsoleTextColor(word_Selected_Color);
         cout << userInput;
-        setConsoleTextColor(DEFAULT_TEXT_COLOR);
+        Graphic::setConsoleTextColor(default_Text_Color);
 
-        //Làm sạch danh sách
-        for(int i = 0; i < 10; i++){
-                gotoxy(x_List, y_List + i);
-                cout << "               ";
+        // Làm sạch danh sách
+        for (int i = 0; i < NUMBER_TO_VIEW - 2; i++)
+        {
+            Graphic::gotoxy(x_List, y_List + i);
+            cout << "                        ";
+            Graphic::gotoxy(x_Point, y_Input);
         }
 
-        setUTF8CodePage();
+        Graphic::setUTF8CodePage();
 
-        //Kiểm tra từ vừa nhập có trong danh sách không
-        if(!isExit(userInput, wordTable.listKey())){
-            if(searchResults.size() != 1){
-                gotoxy(x_Detail, y_Detail);
+        // Kiểm tra từ vừa nhập có trong danh sách không
+        if (!wordTable.keyFound(userInput))
+        {
+            if (searchResults.size() != 1)
+            {
+                Graphic::gotoxy(x_Detail, y_Detail);
                 cout << "                                                           ";
-                gotoxy(x_Detail, y_Detail + 2);
+                Graphic::gotoxy(x_Detail, y_Detail + 2);
                 cout << "                                                           ";
 
-                gotoxy(x_Detail, y_Detail);
-                setConsoleTextColor(1);
-                cout << "Không tìm thấy!!!";
+                Graphic::gotoxy(x_Detail, y_Detail);
+                Graphic::setConsoleTextColor(word_Selected_Color);
+                cout << "Từ này không có trong danh sách!!!";
             }
-            else if(searchResults.size() == 1){
+            // Nếu số từ trong danh sách tìm được chỉ có 1 từ thì hiển thị chi tiết từ đó ra
+            else
+            {
                 displayDetail(searchResults.at(0), x_Detail, y_Detail);
+                Graphic::gotoxy(x_Point, y_Input);
             }
         }
-        else{
+        else
+        {
             displayDetail(searchResults.at(0), x_Detail, y_Detail);
+            Graphic::gotoxy(x_Point, y_Input);
         }
 
-        //Chưa nhập gì thì không hiển thị gì cả
-        if(x_Point == 6){
-            gotoxy(x_Detail, y_Detail);
+        // Chưa nhập gì thì không hiển thị gì cả
+        if (x_Point == 6)
+        {
+            Graphic::gotoxy(x_Detail, y_Detail);
             cout << "                                                           ";
-            gotoxy(x_Detail, y_Detail + 2);
+            Graphic::gotoxy(x_Detail, y_Detail + 2);
             cout << "                                                           ";
         }
 
-        //Hiển thị danh sách từ có chứa chuỗi vừa nhập
-        for(int i = 0; i < searchResults.size(); i++){
-            if(i == 10) break;
-            label(searchResults.at(i).getName(), x_List, y_List + i, DEFAULT_TEXT_COLOR);
+        // Hiển thị danh sách từ có chứa chuỗi vừa nhập
+        for (int i = 0; i < searchResults.size(); i++)
+        {
+            if (i == NUMBER_TO_VIEW - 2)
+                break;
+            Graphic::label(searchResults.at(i).getName(), x_List, y_List + i, list_Key_Color);
         }
-        setDefaultCodePage();
-        //Sleep(TIME_DELAY);
-    }
-    while (key != 27);
+        Graphic::setDefaultCodePage();
+        Sleep(TIME_DELAY);
+    } while (key != 27);
 }
 
-//Định nghĩa hàm phát âm
-void Dictionary::speak(const string& text){
+// Định nghĩa hàm phát âm
+void Dictionary::speak(const string &text)
+{
     string cmdlines = ".\\Common\\TTSAPI.vbs \"" + text + "\"";
     system(cmdlines.c_str());
 }
 
-// UI
-void Dictionary::gotoxy(short x, short y) {
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
-void Dictionary::clscr(){
-    system("cls");
-}
-
-
 // XỬ LÝ GIAO DIỆN
 void Dictionary::mainBox()
 {
-    gotoxy(50, 2);
-    setUTF8CodePage();
+    Graphic::gotoxy(52, 2);
+    Graphic::setUTF8CodePage();
+    Graphic::setConsoleTextColor(title_Color);
     cout << "TỪ ĐIỂN ANH VIỆT";
-    setTitle("DICTIONARY APPLICATION");
-    
-    setDefaultCodePage();
-    setConsoleTextColor(DEFAULT_TEXT_COLOR);
-    //Đường thẳng ở trên
-    gotoxy(10, 5);
+    Graphic::setTitle("DICTIONARY APPLICATION");
+    Graphic::setConsoleTextColor(default_Text_Color);
+
+    Graphic::setDefaultCodePage();
+    Graphic::setConsoleTextColor(box_Color);
+    // Đường thẳng ở trên
+    Graphic::gotoxy(10, 5);
     cout << char(201);
-    for(int i = 0; i < 100; i++){
+    for (int i = 0; i < 100; i++)
+    {
         cout << char(205);
     }
     cout << char(187);
 
-    //Đường thẳng ở giữa
-    gotoxy(40, 10);
-    for(int i = 0; i < 72; i++){
+    // Đường thẳng ở giữa
+    Graphic::gotoxy(40, 10);
+    for (int i = 0; i < 72; i++)
+    {
         cout << char(205);
     }
 
-    //Đường dọc ở bên trái
-    for(int i = 6; i < 30; i++){
-        gotoxy(10, i);
+    // Đường dọc ở bên trái
+    for (int i = 6; i < 30; i++)
+    {
+        Graphic::gotoxy(10, i);
         cout << char(186);
     }
 
-    //Đường dọc ở bên phải
-    for(int i = 6; i < 30; i++){
-        gotoxy(111, i);
+    // Đường dọc ở bên phải
+    for (int i = 6; i < 30; i++)
+    {
+        Graphic::gotoxy(111, i);
         cout << char(186);
     }
 
-    //Đường thẳng ở dưới
-    gotoxy(10, 30);
+    // Đường thẳng ở dưới
+    Graphic::gotoxy(10, 30);
     cout << char(200);
-    for(int i = 0; i < 100; i++){
-        gotoxy(11+i, 30);
+    for (int i = 0; i < 100; i++)
+    {
+        Graphic::gotoxy(11 + i, 30);
         cout << char(205);
     }
     cout << char(188);
 
-    //Đường dọc ở giữa
-    gotoxy(40, 5);
+    // Đường dọc ở giữa
+    Graphic::gotoxy(40, 5);
     cout << char(203);
-    for(int i = 6; i < 30; i++){
-        gotoxy(40, i);
+    for (int i = 6; i < 30; i++)
+    {
+        Graphic::gotoxy(40, i);
         cout << char(186);
     }
-    gotoxy(40, 30);
+    Graphic::gotoxy(40, 30);
     cout << char(202);
-    
-    // Các viền góc
-    gotoxy(40, 10);
-    cout << char(204);
-    gotoxy(111, 10);
-    cout << char(185);
 
-    //In các hướng dẫn
-    gotoxy(44, 6);
-    setConsoleTextColor(12);
-    setUTF8CodePage();
-    cout << "ALT - THÊM\t\t   SPACE - SỬA\t\t     F1 - ĐỌC" << endl;
-    gotoxy(44, 9);
-    cout << "DELETE - XOÁ\t   SHIFT - TÌM KIẾM\t     ESC - TRỞ LẠI" << endl;
-    setConsoleTextColor(DEFAULT_TEXT_COLOR);
-    setDefaultCodePage();
+    // Đường thẳng nhỏ ở dưới góc trái
+    Graphic::gotoxy(11, 28);
+    for (int i = 0; i < 29; i++)
+    {
+        cout << char(205);
+    }
+
+    // Các viền góc
+    Graphic::gotoxy(40, 10);
+    cout << char(204);
+    Graphic::gotoxy(111, 10);
+    cout << char(185);
+    Graphic::gotoxy(40, 28);
+    cout << char(185);
+    Graphic::gotoxy(10, 28);
+    cout << char(204);
+
+    // In các hướng dẫn
+    Graphic::gotoxy(44, 6);
+    Graphic::setConsoleTextColor(text_Menu_Choice_Color);
+    Graphic::setUTF8CodePage();
+    cout << "ALT - THÊM      SPACE - SỬA   DELETE - XOÁ     SHIFT - TÌM KIẾM";
+
+    Graphic::gotoxy(44, 9);
+    cout << "ESC - TRỞ LẠI   F1 - ĐỌC TỪ   F2 - ĐỌC VÍ DỤ" << endl;
+    Graphic::setConsoleTextColor(default_Text_Color);
+    Graphic::setDefaultCodePage();
 }
 
 void Dictionary::searchBox()
 {
-    gotoxy(50, 2);
-    setUTF8CodePage();
+    Graphic::gotoxy(50, 2);
+    Graphic::setUTF8CodePage();
+    Graphic::setConsoleTextColor(title_Color);
     cout << "TỪ ĐIỂN ANH VIỆT";
-    
-    setDefaultCodePage();
-    setConsoleTextColor(DEFAULT_TEXT_COLOR);
-    //Đường thẳng ở trên
-    gotoxy(10, 5);
+
+    Graphic::setDefaultCodePage();
+    Graphic::setConsoleTextColor(box_Color);
+    // Đường thẳng ở trên
+    Graphic::gotoxy(10, 5);
     cout << char(201);
-    for(int i = 0; i < 100; i++){
+    for (int i = 0; i < 100; i++)
+    {
         cout << char(205);
     }
     cout << char(187);
 
-    //Đường thẳng ở giữa
-    gotoxy(11, 7);
-    for(int i = 0; i < 100; i++){
+    // Đường thẳng ở giữa
+    Graphic::gotoxy(11, 7);
+    for (int i = 0; i < 100; i++)
+    {
         cout << char(205);
     }
 
-    //Đường dọc ở bên trái
-    for(int i = 6; i < 30; i++){
-        gotoxy(10, i);
+    // Đường dọc ở bên trái
+    for (int i = 6; i < 30; i++)
+    {
+        Graphic::gotoxy(10, i);
         cout << char(186);
     }
 
-    //Đường dọc ở bên phải
-    for(int i = 6; i < 30; i++){
-        gotoxy(111, i);
+    // Đường dọc ở bên phải
+    for (int i = 6; i < 30; i++)
+    {
+        Graphic::gotoxy(111, i);
         cout << char(186);
     }
 
-    //Đường thẳng ở dưới
-    gotoxy(10, 30);
+    // Đường thẳng ở dưới
+    Graphic::gotoxy(10, 30);
     cout << char(200);
-    for(int i = 0; i < 100; i++){
-        gotoxy(11+i, 30);
+    for (int i = 0; i < 100; i++)
+    {
+        Graphic::gotoxy(11 + i, 30);
         cout << char(205);
     }
     cout << char(188);
 
-    //Đường dọc ở giữa
-    gotoxy(40, 5);
+    // Đường dọc ở giữa
+    Graphic::gotoxy(40, 5);
     cout << char(203);
-    for(int i = 6; i < 30; i++){
-        gotoxy(40, i);
+    for (int i = 6; i < 30; i++)
+    {
+        Graphic::gotoxy(40, i);
         cout << char(186);
     }
-    gotoxy(40, 30);
+    Graphic::gotoxy(40, 30);
     cout << char(202);
-    
-    // Các viền góc
-    gotoxy(10, 7);
-    cout << char(204);
-    gotoxy(40, 7);
-    cout << char(206);
-    gotoxy(111, 7);
-    cout << char(185);
 
-    //In các hướng dẫn
-    gotoxy(43, 6);
-    setConsoleTextColor(12);
-    setUTF8CodePage();
-    cout << "ESC - TRỞ LẠI    F1 - ĐỌC TỪ    F2 - ĐỌC VÍ DỤ" << endl;
-    setDefaultCodePage();
-}
-
-int Dictionary::choice(){
-	int choose = 0;
-    setUTF8CodePage();
-    string arrTitle[3] = {"TỪ ĐIỂN", "GIỚI THIỆU", "THOÁT   "};
-	int key;
-	
-    int width = 35;
-    int height = 3;
-    int x = 40;
-    int y = 10;
-    int text = 0, textSelected = 124, background = 220 , backgroundSelected = 190;
-    int padding = 4;
-    //setConsoleTextColor(31);
-
-    for(int i = 0; i < 3; i++){
-        button(arrTitle[i], x, y + i*padding + 1, width, height, text, background);
+    // Đường thẳng nhỏ ở dưới góc trái
+    Graphic::gotoxy(11, 28);
+    for (int i = 0; i < 29; i++)
+    {
+        cout << char(205);
     }
 
-    button(arrTitle[choose], x, y + choose*padding + 1, width, height, textSelected, backgroundSelected);
+    // Các viền góc
+    Graphic::gotoxy(10, 7);
+    cout << char(204);
+    Graphic::gotoxy(40, 7);
+    cout << char(206);
+    Graphic::gotoxy(111, 7);
+    cout << char(185);
+    Graphic::gotoxy(10, 28);
+    cout << char(204);
+    Graphic::gotoxy(40, 28);
+    cout << char(185);
 
-    do{
-        key = getInputKey();
+    // In các hướng dẫn
+    Graphic::gotoxy(43, 6);
+    Graphic::setConsoleTextColor(text_Menu_Choice_Color);
+    Graphic::setUTF8CodePage();
+    cout << "ESC - TRỞ LẠI    F1 - ĐỌC TỪ    F2 - ĐỌC VÍ DỤ" << endl;
+    Graphic::setDefaultCodePage();
+}
+
+short Dictionary::choice()
+{
+    short choose = 0;
+    Graphic::setUTF8CodePage();
+
+    string arrTitle[3] = {"TỪ ĐIỂN", "GIỚI THIỆU", "THOÁT CHƯƠNG TRÌNH"};
+    short key;
+
+    short width = 35, height = 3;
+    short x = 42, y = 10;
+    short padding = 5;
+
+    Graphic::displayBackgroundColor();
+
+    for (int i = 0; i < 3; i++)
+    {
+        Graphic::button(arrTitle[i], x, y + i * padding + 1, width, height, text_Button_Color, button_Color);
+    }
+
+    Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Choosen_Color, button_Choosen_Color);
+
+    do
+    {
+        key = Graphic::getInputKey();
         switch (key)
         {
         case KEY_UP:
-            if(choose > 0){
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, text, background);
+            if (choose > 0)
+            {
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Color, button_Color);
                 choose--;
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, textSelected, backgroundSelected);
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Choosen_Color, button_Choosen_Color);
             }
-            else if(choose == 0){
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, text, background);
+            else if (choose == 0)
+            {
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Color, button_Color);
                 choose = 2;
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, textSelected, backgroundSelected);
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Choosen_Color, button_Choosen_Color);
             }
             break;
         case KEY_DOWN:
-            if(choose < 2){
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, text, background);
+            if (choose < 2)
+            {
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Color, button_Color);
                 choose++;
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, textSelected, backgroundSelected);
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Choosen_Color, button_Choosen_Color);
             }
-            else if(choose == 2){
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, text, background);
+            else if (choose == 2)
+            {
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Color, button_Color);
                 choose = 0;
-                button(arrTitle[choose], x, y + choose*padding + 1, width, height, textSelected, backgroundSelected);
+                Graphic::button(arrTitle[choose], x, y + choose * padding + 1, width, height, text_Button_Choosen_Color, button_Choosen_Color);
             }
             break;
         }
         Sleep(TIME_DELAY);
-    }while(key != KEY_ENTER);
-    setDefaultCodePage();
-    resetBackgroundColor();
+    } while (key != KEY_ENTER);
+    Graphic::setDefaultCodePage();
+
+    Graphic::resetColor();
     return choose;
 }
 
-void Dictionary::createBox(int x, int y, int width, int height){
-    
-    clscr();
-    setConsoleTextColor(DEFAULT_TEXT_COLOR);
-    //Đường thẳng ở trên
-    gotoxy(x, y - 1);
+void Dictionary::createBox(short x, short y, short width, short height)
+{
+    Graphic::setConsoleTextColor(box_Color);
+    // Đường thẳng ở trên
+    Graphic::gotoxy(x, y - 1);
     cout << char(201);
-    for(int i = 0; i < width; i++){
+    for (int i = 0; i < width; i++)
+    {
         cout << char(205);
     }
     cout << char(187);
 
-    //Đường dọc ở bên trái
-    for(int i = y; i < height; i++){
-        gotoxy(x, i);
+    // Đường dọc ở bên trái
+    for (int i = y; i < height; i++)
+    {
+        Graphic::gotoxy(x, i);
         cout << char(186);
     }
 
-    //Đường dọc ở bên phải
-    for(int i = y; i < height; i++){
-        gotoxy(x + width + 1 , i);
+    // Đường dọc ở bên phải
+    for (int i = y; i < height; i++)
+    {
+        Graphic::gotoxy(x + width + 1, i);
         cout << char(186);
     }
 
-    //Đường thẳng ở dưới
-    gotoxy(x, height);
+    // Đường thẳng ở dưới
+    Graphic::gotoxy(x, height);
     cout << char(200);
-    for(int i = 0; i < width; i++){
-        gotoxy(x + i + 1, height);
+    for (int i = 0; i < width; i++)
+    {
+        Graphic::gotoxy(x + i + 1, height);
         cout << char(205);
     }
     cout << char(188);
 }
 
-//Đổi màu chữ
-void Dictionary::setConsoleTextColor(int textColor) {
-    cout << "\033[38;5;" << textColor << "m";
+int Dictionary::numbersOfPage()
+{
+    int wordsInList = wordTable.listKey()->size();
+    int page = wordsInList / 20 + 1;
+    return page;
 }
 
-void Dictionary::setBackgroundColor(int color) {
-    // Sử dụng mã màu và chuỗi escape ANSI để đặt màu nền
-    cout << "\033[48;5;" << color << "m";
+void Dictionary::displayStatus(int currentWord, int currentPage)
+{
+    Graphic::gotoxy(13, 29);
+    cout << "                         ";
+    Graphic::gotoxy(13, 29);
+    const short textColor[] = {255, 51, 0};
+    Graphic::setConsoleTextColor(textColor);
+    Graphic::setUTF8CodePage();
+    cout << "\u001b[3m"
+         << "Số từ: " << currentWord + 1 << "/" << wordTable.listKey()->size() << " - Trang: " << currentPage + 1 << "/" << numbersOfPage() << "\u001b[23m";
+    Graphic::setDefaultCodePage();
 }
 
-void Dictionary::resetBackgroundColor() {
-    cout << "\033[0m"; // Đặt mã màu về mặc định
-}
-
-void Dictionary::button(string title, int x, int y, int width, int height, int textColor, int backgroundColor){
-    setBackgroundColor(backgroundColor);
-    int midPos = x + 3 + (width - title.length())/2;
-
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            gotoxy(x + j, y);
-            cout << "  "; 
-        }
-        y++;
-        cout << "\n";
-    }
-    gotoxy(midPos , y - (height + 1)/2);
-    setConsoleTextColor(textColor);
-    cout << title;
-}
-
-void Dictionary::label(const string& title, int x, int y, int color) {
-
-    // Đảm bảo rằng x và y không vượt quá giới hạn của màn hình
-    if (x >= 0 && y >= 0 && x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {
-        gotoxy(x, y);
-        setConsoleTextColor(color);
-        // In ra màn hình không vượt quá giới hạn
-        cout << title.substr(0, SCREEN_WIDTH - x);
-    }
-}
-
-void Dictionary::upperCaseFirstLetter(HashTable table){
-    
-    Node *current = table.listKey()->head;
-    while(current != nullptr){
-        Word word = current->data;
-        current->data.getName()[0] = toupper(current->data.getName()[0]);
-        current->data.getMeaning()[0] = toupper(current->data.getMeaning()[0]);
-        current = current->next;
-    }
-}
-
-void Dictionary::displayNumberOfWord(){
-    gotoxy(13, 29);
-    setConsoleTextColor(1);
-    //setBackgroundColor(124);
-    setUTF8CodePage();
-    cout << "\u001b[3m" << "Số từ trong DS:   " << wordTable.listKey()->size() << "\u001b[0m";
-    //setBackgroundColor(0);
-    setDefaultCodePage();
-}
-
-void Dictionary::displayDetail(Word word, int x, int y){
-    
-    //Làm sạch tên, loại và nghĩa
-    gotoxy(x, y);
-    resetBackgroundColor();
+void Dictionary::displayDetail(Word word, short x, short y)
+{
+    // Làm sạch tên, loại và nghĩa
+    Graphic::gotoxy(x, y);
     cout << "                                                                 ";
-    //Làm sạch ví dụ
-    gotoxy(x, y + 2);
+    // Làm sạch ví dụ
+    Graphic::gotoxy(x, y + 2);
     cout << "                                                                 ";
     // In ra chi tiết từ
-    gotoxy(x, y);
-    setConsoleTextColor(220);
+    Graphic::gotoxy(x, y);
+    Graphic::setConsoleTextColor(word_Selected_Color);
+    cout << "\u001b[3m";
     cout << word.getName() << " (" << word.getType() << "): " << word.getMeaning();
-    gotoxy(x, y + 2);
+    Graphic::gotoxy(x, y + 2);
     cout << "Ví dụ: " << word.getExample();
-    setConsoleTextColor(DEFAULT_TEXT_COLOR);
+    cout << "\u001b[23m";
+    Graphic::setConsoleTextColor(default_Text_Color);
 }
 
-void Dictionary::displayListKey(int start, int end, int x, int y){
-    Node *current = wordTable.listKey()->head;
-    int i = 0;
+void Dictionary::displayListKey(const int &current_Word, const int &current_Page, short x, short y)
+{
+    Node *current = wordTable.listKey()->getHead();
+    int i = 0, count = 0;
+    int wordIndex = current_Page * NUMBER_TO_VIEW + current_Word;
     // table.listKey()->quickSort(table.listKey(), 0, table.listKey()->size() - 1);
     // upperCaseFirstLetter(table);
-    int index = start;
 
-    while(current != nullptr){
-        Word word = current->data;
-        label(word.getName(), x, y + i, DEFAULT_TEXT_COLOR);
-        i++;
-        if(i == end) break;
-        current = current->next;
+    for (int i = 0; i < NUMBER_TO_VIEW; i++)
+    {
+        Graphic::gotoxy(x, y + i);
+        cout << "                        ";
+        // Graphic::gotoxy(x, y);
     }
-    label(wordTable.listKey()->at(index).getName(), x, y + index, WORD_SELECTED_COLOR);
+    while (current != nullptr)
+    {
+        Word word = current->getData();
+        Graphic::label(word.getName(), x, y + i, list_Key_Color);
+        i++;
+        count++;
+        if (count % NUMBER_TO_VIEW == 0 && count / NUMBER_TO_VIEW == current_Page)
+        {
+            for (int i = 0; i < NUMBER_TO_VIEW; i++)
+            {
+                Graphic::gotoxy(x, y + i);
+                cout << "                        ";
+                // Graphic::gotoxy(x, y);
+            }
+            i = 0;
+        }
+        if (i == NUMBER_TO_VIEW)
+            break;
+        current = current->getNext();
+    }
+    cout << "\u001b[3m";
+    Graphic::label(wordTable.listKey()->at(wordIndex).getName(), x, y + current_Word, word_Selected_Color);
+    cout << "\u001b[23m";
 }
 
-void Dictionary::wordSelected(int indexKey){
-    int x = 43;
-    int y = 12;
-    setUTF8CodePage();
+void Dictionary::wordSelected(int indexKey)
+{
+    short x = 43;
+    short y = 12;
+    Graphic::setUTF8CodePage();
     displayDetail(wordTable.listKey()->at(indexKey), x, y);
-    setDefaultCodePage();
+    Graphic::setDefaultCodePage();
 }
 
-void textToSpeech(const string& text) {
+void textToSpeech(const string &text)
+{
     string cmdlines = "TTSAPI.vbs \"" + text + "\"";
     system(cmdlines.c_str());
 }
-
-//Đổi tiêu đề console
-void Dictionary::setTitle(const char *title)
-{
-	SetConsoleTitleA(title);
-}
-
-//Đặt codePage thành UTF8
-void Dictionary::setUTF8CodePage(){
-    system("MODE CON: CP SELECT=65001 > nul");
-}
-
-//Trả codePage về mặc định
-void Dictionary::setDefaultCodePage(){
-    SetConsoleOutputCP(defaultCodePage);
-}
-
-//Đưa ra thông báo 
-int Dictionary::showMessageBox(const char *message, const char *caption, UINT type)
-{
-    HWND cur_window = GetConsoleWindow();
-
-    // Chuyển đổi chuỗi char thành chuỗi wchar_t
-    int size_needed = MultiByteToWideChar(CP_UTF8, 0, message, -1, NULL, 0);
-    wchar_t *w_message = new wchar_t[size_needed];
-    MultiByteToWideChar(CP_UTF8, 0, message, -1, w_message, size_needed);
-
-    int size_needed_caption = MultiByteToWideChar(CP_UTF8, 0, caption, -1, NULL, 0);
-    wchar_t *w_caption = new wchar_t[size_needed_caption];
-    MultiByteToWideChar(CP_UTF8, 0, caption, -1, w_caption, size_needed_caption);
-
-    int result = MessageBoxW(cur_window, w_message, w_caption, type);
-
-    delete[] w_message;
-    delete[] w_caption;
-
-    return result;
-}
-
-
-KEY Dictionary::getInputKey()
-{
-	int KeyPressed = 0;
-	KEY key = KEY_NONE;
-
-	while (!KeyPressed)
-	{
-		fflush(stdin);
-
-		if (GetAsyncKeyState(VK_MENU) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_ADD;
-        }
-        else if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_UPDATE;
-        }
-        else if (GetAsyncKeyState(VK_DELETE) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_DELETE;
-        }
-		else if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_SEARCH;
-        }
-		else if (GetAsyncKeyState(VK_UP) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_UP;
-        }
-		else if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_DOWN;
-        }
-        else if (GetAsyncKeyState(VK_RETURN) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_ENTER;
-        }
-        else if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-        {
-            KeyPressed = 1;
-            key = KEY_EXIT;
-        }
-		else if (GetAsyncKeyState(VK_BACK) & 0x8000)
-		{
-			KeyPressed = 1;
-            key = KEY_POP;
-		}
-        else if (GetAsyncKeyState(VK_F1) & 0x8000)
-		{
-			KeyPressed = 1;
-            key = KEY_SPEAK_WORD;
-		}
-        else if (GetAsyncKeyState(VK_F2) & 0x8000)
-		{
-			KeyPressed = 1;
-            key = KEY_SPEAK_EXAMPLE;
-		}
-		fflush(stdin);
-	}
-
-
-	fflush(stdin);
-	return key;
-}
-
 
 

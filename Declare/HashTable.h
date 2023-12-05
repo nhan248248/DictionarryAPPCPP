@@ -6,16 +6,15 @@
 class HashTable
 {
 private:
-    static const int tableSize = 1000;
+    const int tableSize = 1000;
     DoublyLinkedList* listItems;
 public:
     HashTable();
     ~HashTable();
     int hashFunction(const string &key);
-    int size();
     DoublyLinkedList* listKey();
     void insert(const Word &word);
-    int getTableSize();
+    bool keyFound(const string &nameKey);
 };
 
 #endif
