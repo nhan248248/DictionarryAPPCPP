@@ -67,19 +67,16 @@ void Dictionary::dictionaryMenu()
     int choose;
     int currentWord = 0, currentPage = 0, wordIndex = 0;
     int x = 15, y = 7;
-    int numbersWordInPage = 0;
+    int numbersWordInPage = NUMBER_TO_VIEW;
 
     Graphic::displayBackgroundColor();
     mainBox();
-    // displayListKey(index, x, y);
-    // wordSelected(index);
-
     do
     {
         wordIndex = currentPage * NUMBER_TO_VIEW + currentWord;
-        numbersWordInPage = (wordIndex / NUMBER_TO_VIEW == 0) ? NUMBER_TO_VIEW : wordTable.listKey()->size() % NUMBER_TO_VIEW;
         displayStatus(wordIndex, currentPage);
         displayListKey(currentWord, currentPage, x, y);
+        numbersWordInPage = (currentPage == numbersOfPage() - 1)? wordTable.listKey()->size()%NUMBER_TO_VIEW : NUMBER_TO_VIEW;
         wordSelected(wordIndex);
         choose = Graphic::getInputKey();
 
@@ -107,14 +104,14 @@ void Dictionary::dictionaryMenu()
         }
         else if (choose == KEY_LEFT)
         {
-            if (currentPage < numbersOfPage() - 1)
+            if (currentPage > 0)
             {
-                currentPage++;
+                currentPage--;
                 currentWord = 0;
             }
-            else if (currentPage == numbersOfPage() - 1)
+            else if (currentPage == 0)
             {
-                currentPage = 0;
+                currentPage = numbersOfPage() - 1;
                 currentWord = 0;
             }
         }
@@ -142,7 +139,8 @@ void Dictionary::dictionaryMenu()
         {
             Graphic::clscr();
             Graphic::displayBackgroundColor();
-            update();
+            Word oldWord = wordTable.listKey()->at(wordIndex);
+            update(oldWord);
             Graphic::clscr();
             dictionaryMenu();
         }
@@ -250,7 +248,7 @@ void Dictionary::addWord()
 
         if (outFile.is_open()) {
             // Ghi thông tin từ vào tệp
-            outFile << word.getName() << "/" << word.getType() << "/" << word.getMeaning() << "/" << word.getExample() << "\n";
+            outFile << word;
 
             // Đóng tệp
             outFile.close();
@@ -270,16 +268,94 @@ void Dictionary::addWord()
     Graphic::setDefaultCodePage();
 }
 // 2. Chức năng sửa
-void Dictionary::update()
+void Dictionary::update(const Word& oldWord)
 {
-    createBox(40, 10, 40, 16);
-    Graphic::setUTF8CodePage();
+    Word newWord;
+    string s = "";
+
+    Graphic::displayBackgroundColor();
+    createBox(25, 6, 70, 12);
+    createBox(25, 14, 70, 20);
+    Graphic::setUTF8CodePage();    
     
-    Graphic::gotoxy(50, 2);
-    cout << "Sửa từ ở đây";
-    
-    
-    Graphic::showMessageBox("Đã sửa", "Thông báo", 0);
+
+    Graphic::gotoxy(57, 4);
+    Graphic::setConsoleTextColor(title_Color);
+    cout << "SỬA TỪ";
+
+    Graphic::gotoxy(28, 7);
+    Graphic::setConsoleTextColor(blue_Color);
+    cout << "Tên cũ: " << oldWord.getName();
+    Graphic::gotoxy(28, 8);
+    cout << "Loại từ cũ: " << oldWord.getType();
+    Graphic::gotoxy(28, 9);
+    cout << "Nghĩa cũ: " << oldWord.getMeaning();
+    Graphic::gotoxy(28, 10);
+    cout << "Ví dụ cũ: " << oldWord.getExample();
+    // Nhập tên từ
+    do
+    {
+        Graphic::setConsoleTextColor(default_Text_Color);
+        Graphic::gotoxy(28, 15);
+        cout << "--> Tên mới: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
+        fflush(stdin);
+        getline(cin, s);
+    } while (s.empty());
+    newWord.setName(s);
+
+    // Nhập loại từ
+    do
+    {
+        Graphic::setConsoleTextColor(default_Text_Color);
+        Graphic::gotoxy(28, 16);
+        cout << "--> Loại từ mới: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
+        fflush(stdin);
+        getline(cin, s);
+    } while (s.empty());
+    newWord.setType(s);
+
+    // Nhập nghĩa
+    do
+    {
+        Graphic::setConsoleTextColor(default_Text_Color);
+        Graphic::gotoxy(28, 17);
+        cout << "--> Nghĩa mới: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
+        fflush(stdin);
+        getline(cin, s);
+    } while (s.empty());
+    newWord.setMeaning(s);
+
+    // Nhập ví dụ
+    do
+    {
+        Graphic::setConsoleTextColor(default_Text_Color);
+        Graphic::gotoxy(28, 18);
+        cout << "--> Ví dụ mới: ";
+        Graphic::setConsoleTextColor(word_Selected_Color);
+        fflush(stdin);
+        getline(cin, s);
+    } while (s.empty());
+    newWord.setExample(s);
+
+    if (!wordTable.keyFound(newWord))
+    {
+        int choose = Graphic::showMessageBox("Bạn chắc chắn muốn sửa từ này?", "Thông báo", 1);
+        if(choose == 1){
+            Graphic::showMessageBox("Sửa từ thành công!", "Thông báo", 0);
+            wordTable.updateByKey(oldWord.getName(), newWord);
+            saveToFile(fileName);
+        }
+    }
+    else
+    {
+        Graphic::showMessageBox("Từ bạn vừa sửa đã có trong danh sách!", "Lỗi!!!", 0);
+        Graphic::setDefaultCodePage();
+        Graphic::clscr();
+        dictionaryMenu();
+    }
     Graphic::setDefaultCodePage();
 }
 // 3. Chức năng Xóa
@@ -767,9 +843,8 @@ void Dictionary::displayDetail(Word word, short x, short y)
 
 void Dictionary::displayListKey(const int &current_Word, const int &current_Page, short x, short y)
 {
-    Node *current = wordTable.listKey()->getHead();
-    int i = 0, count = 0;
     int wordIndex = current_Page * NUMBER_TO_VIEW + current_Word;
+    int start = current_Page*NUMBER_TO_VIEW, end = current_Page*NUMBER_TO_VIEW + NUMBER_TO_VIEW;
     // table.listKey()->quickSort(table.listKey(), 0, table.listKey()->size() - 1);
     // upperCaseFirstLetter(table);
 
@@ -779,26 +854,10 @@ void Dictionary::displayListKey(const int &current_Word, const int &current_Page
         cout << "                        ";
         // Graphic::gotoxy(x, y);
     }
-    while (current != nullptr)
+    for(int i = start; i < end; i++)
     {
-        Word word = current->getData();
-        Graphic::label(word.getName(), x, y + i, list_Key_Color);
-        i++;
-        count++;
-        if (count % NUMBER_TO_VIEW == 0 && count / NUMBER_TO_VIEW == current_Page)
-        {
-            for (int i = 0; i < NUMBER_TO_VIEW; i++)
-            {
-                Graphic::gotoxy(x, y + i);
-                cout << "                        ";
-                // Graphic::gotoxy(x, y);
-            }
-            i = 0;
-        }
-        if (i == NUMBER_TO_VIEW)
-            break;
-        current = current->getNext();
-    }
+        Graphic::label(wordTable.listKey()->at(i).getName(), x, y + (i - start), default_Text_Color);
+    }   
     cout << "\u001b[3m";
     Graphic::label(wordTable.listKey()->at(wordIndex).getName(), x, y + current_Word, word_Selected_Color);
     cout << "\u001b[23m";

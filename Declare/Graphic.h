@@ -41,21 +41,22 @@ UINT utf8CodePage = 65001;
 #define SCREEN_HEIGHT 35
 #define NUMBER_TO_VIEW 20
 
-const short title_Color[] = {200, 0, 255};       // Green
-const short default_Text_Color[] = {0, 255, 0};  // Green
-const short word_Selected_Color[] = {0, 17, 51}; // Green blue
+const short blue_Color[] = {0, 0, 255};
+const short title_Color[] = {200, 0, 255};  
+const short default_Text_Color[] = {0, 102, 0};   
+const short word_Selected_Color[] = {0, 17, 51};  
 const short default_Background_Color[] = {0, 0, 0};
 
-const short background_Color[] = {255, 255, 0};            // White
-const short button_Color[] = {51, 153, 255};               // 
-const short text_Button_Color[] = {0, 0, 0};               // Red
-const short button_Choosen_Color[] = {0, 128, 255};        //
-const short text_Button_Choosen_Color[] = {255, 255, 255}; // 
+const short background_Color[] = {255, 255, 0};            
+const short button_Color[] = {51, 153, 255};                
+const short text_Button_Color[] = {0, 0, 0};               
+const short button_Choosen_Color[] = {0, 128, 255};        
+const short text_Button_Choosen_Color[] = {255, 255, 255};  
 const short shadow_Color[] = {0, 77, 153};
 
-const short box_Color[] = {0, 0, 0};                  //
-const short text_Menu_Choice_Color[] = {0, 102, 255}; //
-const short list_Key_Color[] = {0, 153, 0};           //
+const short box_Color[] = {0, 0, 0};                  
+const short text_Menu_Choice_Color[] = {0, 102, 255}; 
+const short list_Key_Color[] = {0, 153, 0};           
 
 class Graphic
 {

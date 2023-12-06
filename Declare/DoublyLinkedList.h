@@ -16,7 +16,9 @@ public:
   ~DoublyLinkedList();
 
   bool isEmpty() const;
+  Node *findNodeByKey(const string &key);
   void append(const Word &word);
+  void updateNode(const string &key, const Word &newData);
   void deleteNode(const Word &word);
   Word at(int index);
   int size() const;

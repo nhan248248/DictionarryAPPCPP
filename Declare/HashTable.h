@@ -16,6 +16,7 @@ public:
     DoublyLinkedList *listKey();          // Lấy danh sách từ trong HashTable
     void insert(const Word &word);        // Thêm từ vào HashTable
     void deleteKey(const Word& word);    // Xóa key trong HashTable
+    void updateByKey(const string &key, const Word &newData);
     bool keyFound(const Word &word); // Kiểm tra từ cần tìm có trong HashTable hay không
 
     int getTableSize() const;

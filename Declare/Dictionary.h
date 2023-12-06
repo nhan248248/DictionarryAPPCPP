@@ -17,7 +17,7 @@ public:
     void dictionaryMenu();                                                                   // Các chức năng chính của ứng dụng nằm trong này
     void introduction();                                                                     // Giới thiệu về chương trình
     void addWord();                                                                          // Hàm thêm từ
-    void update();                                                                           // Hàm sửa từ
+    void update(const Word& oldWord);                                                                           // Hàm sửa từ
     void deleteWord(const int index);                                                     // Hàm xóa từ
     void search();                                                                           // Hàm tìm kiếm từ
     DoublyLinkedList searchInList(const string &query, DoublyLinkedList *dataList);          // Hàm trả về danh sách các từ chứa chuỗi được nhập

@@ -28,6 +28,23 @@ bool DoublyLinkedList::isEmpty() const
     return head == nullptr;
 }
 
+Node *DoublyLinkedList::findNodeByKey(const string &key)
+{
+    Node *current = head;
+
+    while (current != nullptr)
+    {
+        if (current->getKey() == key)
+        {
+            return current;
+        }
+
+        current = current->getNext();
+    }
+
+    return nullptr;
+}
+
 void DoublyLinkedList::append(const Word &word)
 {
     Node *newNode = new Node(word);
@@ -41,6 +58,16 @@ void DoublyLinkedList::append(const Word &word)
         tail->setNext(newNode);
         newNode->setPrev(tail);
         tail = newNode;
+    }
+}
+
+void DoublyLinkedList::updateNode(const string &key, const Word &newData)
+{
+    Node *nodeToUpdate = findNodeByKey(key);
+    
+    if (nodeToUpdate != nullptr)
+    {
+        nodeToUpdate->setData(newData);
     }
 }
 

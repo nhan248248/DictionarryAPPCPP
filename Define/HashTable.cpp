@@ -31,6 +31,12 @@ void HashTable::deleteKey(const Word& word){
     listItems[index].deleteNode(word);
 }
 
+void HashTable::updateByKey(const string &key, const Word &newData)
+{
+    int index = hashFunction(key);
+    listItems[index].updateNode(key, newData);
+}
+
 DoublyLinkedList *HashTable::listKey()
 {
     // Tạo một danh sách liên kết mới
