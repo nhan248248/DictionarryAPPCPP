@@ -1,27 +1,22 @@
-Apple/danh từ/quả táo/I have an apple
-Hi/Động từ/Xin chào/Hi, I am Nhàn
-Computer/Danh từ/Máy tính/I work with a computer.
 Programming/Danh từ/Lập trình/I enjoy programming.
-Mountain/Danh từ/Núi/They climbed the mountain.
-Ocean/Danh từ/Đại dương/The ocean is vast.
-Adventure/Danh từ/Cuộc phiêu lưu/They had an exciting adventure.
-Listen/Động từ/Nghe/Listen carefully to the music.
-Garden/Danh từ/Vườn/She planted flowers in the garden.
-Incredible/Tính từ/Không thể tin được/The view was incredible.
-Apple/Danh từ/Quả táo/i have an apple.
-Work/Động từ/Làm việc/i am working.
-Word/Danh từ/Từ/i am writing some words.
-Run/Động từ/Chạy/I am running on the road.
-Cute/Tính từ/Dễ thương/You are so cute!.
-Sun/Danh từ/Mặt trời/The sun is shining.
-Moon/Danh từ/Mặt trăng/The moon is full tonight.
-River/Danh từ/Sông/The river flows through the valley.
-Forest/Danh từ/Rừng/The forest is home to many animals.
-Rain/Danh từ/Mưa/I love the sound of rain.
-Sky/Danh từ/Bầu trời/The sky is clear and blue.
-Star/Danh từ/Ngôi sao/Each star in the sky is unique.
-Wind/Danh từ/Gió/The wind is blowing gently.
-Fire/Danh từ/Lửa/They gathered around the fire.
-Book/Danh từ/Sách/She enjoys reading a good book.
-h/c/a/e
+Hi/Động từ/Xin chào/Hi, I am Nhàn
 Big/Tính từ/to lớn/That is a big cat
+Run/Động từ/Chạy/I am running on the road.
+Sun/Danh từ/Mặt trời/The sun is shining.
+Sky/Danh từ/Bầu trời/The sky is clear and blue.
+Fire/Danh từ/Lửa/They gathered around the fire.
+Rain/Danh từ/Mưa/I love the sound of rain.
+Book/Danh từ/Sách/She enjoys reading a good book.
+Cute/tính từ/Dễ thương/she is so Cute
+Moon/Danh từ/Mặt trăng/The moon is full tonight.
+Star/Danh từ/Ngôi sao/Each star in the sky is unique.
+Word/Danh từ/Từ/i am writing some words.
+Work/Động từ/Làm việc/i am working.
+Ocean/Danh từ/Đại dương/The ocean is vast.
+River/Danh từ/Sông/The river flows through the valley.
+Garden/Danh từ/Vườn/She planted flowers in the garden.
+Listen/Động từ/Nghe/Listen carefully to the music.
+Forest/Danh từ/Rừng/The forest is home to many animals.
+Mountain/Danh từ/Núi/They climbed the mountain.
+Computer/Danh từ/Máy tính/I work with a computer.
+Adventure/Danh từ/Cuộc phiêu lưu/They had an exciting adventure.

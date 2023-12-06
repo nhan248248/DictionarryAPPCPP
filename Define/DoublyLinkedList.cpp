@@ -44,12 +44,13 @@ void DoublyLinkedList::append(const Word &word)
     }
 }
 
-void DoublyLinkedList::deleteNodeByKey(const string &key)
+void DoublyLinkedList::deleteNode(const Word &word)
 {
     Node *current = head;
 
-    while (current != nullptr && current->getData().getName() != key)
+    while (current != nullptr)
     {
+        if(current->getData() == word) break;
         current = current->getNext();
     }
 

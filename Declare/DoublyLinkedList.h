@@ -17,7 +17,7 @@ public:
 
   bool isEmpty() const;
   void append(const Word &word);
-  void deleteNodeByKey(const string& key);
+  void deleteNode(const Word &word);
   Word at(int index);
   int size() const;
   

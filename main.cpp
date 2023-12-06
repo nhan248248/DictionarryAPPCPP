@@ -2,8 +2,7 @@
 
 int main()
 {
-    string fileName = "data.txt";
-    Dictionary x(fileName);
+    Dictionary x;
     getchar();
     return 0;
 }

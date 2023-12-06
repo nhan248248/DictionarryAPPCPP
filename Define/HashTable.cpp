@@ -26,9 +26,9 @@ void HashTable::insert(const Word &word)
     listItems[index].append(word);
 }
 
-void HashTable::deleteKey(const string& key){
-    int index = hashFunction(key);
-    listItems[index].deleteNodeByKey(key);
+void HashTable::deleteKey(const Word& word){
+    int index = hashFunction(word.getName());
+    listItems[index].deleteNode(word);
 }
 
 DoublyLinkedList *HashTable::listKey()
@@ -52,15 +52,15 @@ DoublyLinkedList *HashTable::listKey()
     return nameList;
 }
 
-bool HashTable::keyFound(const string &nameKey)
+bool HashTable::keyFound(const Word &word)
 {   
-    int index = hashFunction(nameKey);
+    int index = hashFunction(word.getName());
 
     DoublyLinkedList* currentList = &listItems[index];
 
     Node* currentNode = currentList->getHead();
     while (currentNode != nullptr) {
-        if (currentNode->getData().getName() == nameKey) {
+        if (currentNode->getData() == word) {
             return true;
         }
         currentNode = currentNode->getNext();
@@ -68,33 +68,7 @@ bool HashTable::keyFound(const string &nameKey)
     return false;
 }
 
-void HashTable::loadFromFile(const string& filename) {
-    ifstream file(filename);
-
-    if (file.is_open()) {
-        Word word;
-        while (file >> word) {  
-            insert(word);
-        }
-        file.close();
-    }
-}
-
-void HashTable::saveToFile(const string& filename) {
-    ofstream file(filename);
-
-    if (file.is_open()) {
-        // Duyệt qua danh sách và ghi vào file
-        // Giả sử có hàm displayListKey để lấy danh sách từ HashTable
-        DoublyLinkedList* list = listKey();
-        for (int i = 0; i < tableSize; ++i) {
-            Node* current = list[i].getHead();
-            while (current != nullptr) {
-                file << current->getData() << endl;
-                current = current->getNext();
-            }
-        }
-
-        file.close();
-    }
+int HashTable::getTableSize() const
+{
+    return tableSize;
 }

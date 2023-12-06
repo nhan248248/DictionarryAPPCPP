@@ -1,8 +1,8 @@
 #include "../Declare/Dictionary.h"
 
-Dictionary::Dictionary(const string& fileName)
+Dictionary::Dictionary()
 {
-    wordTable.loadFromFile(fileName);
+    loadFromFile(fileName);
     mainMenu();
 }
 Dictionary::~Dictionary()
@@ -148,8 +148,7 @@ void Dictionary::dictionaryMenu()
         }
         else if (choose == KEY_DELETE)
         {
-            string key = wordTable.listKey()->at(wordIndex).getName();
-            deleteWord(key);
+            deleteWord(wordIndex);
         }
         else if (choose == KEY_SEARCH)
         {
@@ -241,7 +240,7 @@ void Dictionary::addWord()
 
 
 
-    if (!wordTable.keyFound(word.getName()))
+    if (!wordTable.keyFound(word))
     {
         // Thêm từ vào hashtable
         wordTable.insert(word);
@@ -284,17 +283,18 @@ void Dictionary::update()
     Graphic::setDefaultCodePage();
 }
 // 3. Chức năng Xóa
-void Dictionary::deleteWord(const string& name)
+void Dictionary::deleteWord(const int index)
 {
+    Word data = wordTable.listKey()->at(index);
     Graphic::setUTF8CodePage();
-    
-    wordTable.deleteKey(name);
-    
-    Graphic::showMessageBox("Đã xóa", "Thông báo", 0);
+    int choose = Graphic::showMessageBox("Bạn chắc chắn muốn xóa từ này?", "Thông báo", 1);
+    if(choose == 1){
+        Graphic::showMessageBox("Xóa từ thành công!", "Thông báo", 0);
+        wordTable.deleteKey(data);
+        saveToFile(fileName);
+    }
     Graphic::setDefaultCodePage();
 }
-
-
 
 // 4. Chức năng tìm kiếm
 
@@ -410,35 +410,18 @@ void Dictionary::search()
         Graphic::setUTF8CodePage();
 
         // Kiểm tra từ vừa nhập có trong danh sách không
-        if (!wordTable.keyFound(userInput))
-        {
-            if (searchResults.size() != 1)
-            {
-                Graphic::gotoxy(x_Detail, y_Detail);
-                cout << "                                                           ";
-                Graphic::gotoxy(x_Detail, y_Detail + 2);
-                cout << "                                                           ";
+        if(!searchResults.isEmpty()){
+            //Làm sạch chỗ hiển thị chi tiết
+            Graphic::gotoxy(x_Detail, y_Detail);
+            cout << "                                                           ";
+            Graphic::gotoxy(x_Detail, y_Detail + 2);
+            cout << "                                                           ";
 
-                Graphic::gotoxy(x_Detail, y_Detail);
-                Graphic::setConsoleTextColor(word_Selected_Color);
-                cout << "Từ này không có trong danh sách!!!";
-            }
-            // Nếu số từ trong danh sách tìm được chỉ có 1 từ thì hiển thị chi tiết từ đó ra
-            else
-            {
-                displayDetail(searchResults.at(0), x_Detail, y_Detail);
-                Graphic::gotoxy(x_Point, y_Input);
-            }
-        }
-        else
-        {
+            //Hiển thị chi tiết từ đầu tiên
             displayDetail(searchResults.at(0), x_Detail, y_Detail);
             Graphic::gotoxy(x_Point, y_Input);
         }
-
-        // Chưa nhập gì thì không hiển thị gì cả
-        if (x_Point == 6)
-        {
+        else{
             Graphic::gotoxy(x_Detail, y_Detail);
             cout << "                                                           ";
             Graphic::gotoxy(x_Detail, y_Detail + 2);
@@ -830,10 +813,29 @@ void Dictionary::wordSelected(int indexKey)
     Graphic::setDefaultCodePage();
 }
 
-void textToSpeech(const string &text)
-{
-    string cmdlines = "TTSAPI.vbs \"" + text + "\"";
-    system(cmdlines.c_str());
+
+//File
+void Dictionary::loadFromFile(const string& fileName) {
+    ifstream file(fileName);
+
+    if (file.is_open()) {
+        Word word;
+        while (file >> word) {  
+            wordTable.insert(word);
+        }
+        file.close();
+    }
+}
+
+void Dictionary::saveToFile(const string& fileName) {
+    ofstream file(fileName);
+
+    if (file.is_open()) {
+        for(int i = 0; i < wordTable.listKey()->size(); i++){
+            file << wordTable.listKey()->at(i);
+        }
+    }
+    file.close();
 }
 
 

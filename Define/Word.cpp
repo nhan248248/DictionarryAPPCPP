@@ -72,6 +72,12 @@ istream& operator>>(istream& in, Word& word) {
 
 ostream &operator<<(ostream& out, const Word& word)
 {
-    out << word.name << "/" << word.type << "/" << word.meaning << "/" << word.example;
+    out << word.name << "/" << word.type << "/" << word.meaning << "/" << word.example << endl;
     return out;
+}
+
+bool Word::operator==(const Word &other) const
+{
+    // So sánh các thành phần của hai đối tượng Word
+    return (name == other.name && type == other.type && meaning == other.meaning && example == other.example);
 }

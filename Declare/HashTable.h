@@ -7,17 +7,18 @@ class HashTable
 {
 private:
     const int tableSize = 1000;
-    DoublyLinkedList* listItems;
+    DoublyLinkedList *listItems;
+
 public:
     HashTable();
     ~HashTable();
-    int hashFunction(const string &key);
-    DoublyLinkedList* listKey();
-    void insert(const Word &word);
-    void deleteKey(const string& key);
-    bool keyFound(const string &nameKey);
-    void loadFromFile(const string& filename);
-    void saveToFile(const string& filename);   
+    int hashFunction(const string &key);  // Trả về giá trị hash của 1 chuỗi
+    DoublyLinkedList *listKey();          // Lấy danh sách từ trong HashTable
+    void insert(const Word &word);        // Thêm từ vào HashTable
+    void deleteKey(const Word& word);    // Xóa key trong HashTable
+    bool keyFound(const Word &word); // Kiểm tra từ cần tìm có trong HashTable hay không
+
+    int getTableSize() const;
 };
 
 #endif

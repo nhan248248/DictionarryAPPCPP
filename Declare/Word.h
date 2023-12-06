@@ -25,6 +25,7 @@ public:
     void setExample(const string& e);
     friend istream& operator >> (istream& in, Word& word);
     friend ostream& operator << (ostream& out, const Word& word);
+    bool operator==(const Word &other) const;
 };
 
 #endif

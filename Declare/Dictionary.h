@@ -7,9 +7,9 @@ class Dictionary
 {
 private:
     HashTable wordTable;
-
+    string fileName = "data.txt";
 public:
-    Dictionary(const string& fileName);
+    Dictionary();
     ~Dictionary();
 
     // Control
@@ -18,7 +18,7 @@ public:
     void introduction();                                                                     // Giới thiệu về chương trình
     void addWord();                                                                          // Hàm thêm từ
     void update();                                                                           // Hàm sửa từ
-    void deleteWord(const string& name);                                                     // Hàm xóa từ
+    void deleteWord(const int index);                                                     // Hàm xóa từ
     void search();                                                                           // Hàm tìm kiếm từ
     DoublyLinkedList searchInList(const string &query, DoublyLinkedList *dataList);          // Hàm trả về danh sách các từ chứa chuỗi được nhập
     void speak(const string &text);                                                          // Hàm phát âm tiếng Anh
@@ -27,6 +27,10 @@ public:
     void displayDetail(Word word, short x, short y);                                         // Hàm hiển thị chi tiết tên, loại, nghĩa và ví dụ của từ vựng
     void displayListKey(const int &current_Word, const int &current_Page, short x, short y); // Hàm in ra danh sách tên từ
     void wordSelected(int indexKey);                                                         // Hiển thị danh sách
+
+    // File
+    void loadFromFile(const string& fileName);
+    void saveToFile(const string& fileName);
 
     // UI
     void mainBox();                                              // In khung của
