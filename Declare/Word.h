@@ -23,8 +23,8 @@ public:
     void setType(const string& t);
     void setMeaning(const string& m);
     void setExample(const string& e);
-
-    // friend ostream& operator << (ostream& out, const Word& word);
+    friend istream& operator >> (istream& in, Word& word);
+    friend ostream& operator << (ostream& out, const Word& word);
 };
 
 #endif

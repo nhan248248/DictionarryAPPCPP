@@ -59,8 +59,19 @@ void Word::setExample(const string& e)
     this->example = e;
 }
 
-// ostream &operator<<(ostream& out, const Word& word)
-// {
-//     out << word.name << "(" << word.type << "): " << word.meaning << endl << "Vi du: " << word.example << endl;
-//     return out;
-// }
+istream& operator>>(istream& in, Word& word) {
+    string line;
+    getline(in, line);
+    stringstream ss(line);
+    getline(ss, word.name, '/');
+    getline(ss, word.type, '/');
+    getline(ss, word.meaning, '/');
+    getline(ss, word.example);
+    return in;
+}
+
+ostream &operator<<(ostream& out, const Word& word)
+{
+    out << word.name << "/" << word.type << "/" << word.meaning << "/" << word.example;
+    return out;
+}

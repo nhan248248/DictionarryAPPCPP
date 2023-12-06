@@ -44,6 +44,42 @@ void DoublyLinkedList::append(const Word &word)
     }
 }
 
+void DoublyLinkedList::deleteNodeByKey(const string &key)
+{
+    Node *current = head;
+
+    while (current != nullptr && current->getData().getName() != key)
+    {
+        current = current->getNext();
+    }
+
+    if (current == nullptr)
+    {
+        return;
+    }
+    Node *prevNode = current->getPrev();
+    Node *nextNode = current->getNext();
+
+    if (prevNode != nullptr)
+    {
+        prevNode->setNext(nextNode);
+    }
+    else
+    {
+        head = nextNode;
+    }
+
+    if (nextNode != nullptr)
+    {
+        nextNode->setPrev(prevNode);
+    }
+    else
+    {
+        tail = prevNode;
+    }
+    delete current;
+}
+
 Word DoublyLinkedList::at(int index)
 {
     Node *current = head;
@@ -152,7 +188,7 @@ void DoublyLinkedList::quickSort(DoublyLinkedList *listWords, int left, int righ
         quickSort(listWords, i, right);
 }
 
-Node* DoublyLinkedList::getHead() const
+Node *DoublyLinkedList::getHead() const
 {
     return head;
 }
@@ -162,7 +198,7 @@ void DoublyLinkedList::setHead(Node *newHead)
     head = newHead;
 }
 
-Node* DoublyLinkedList::getTail() const
+Node *DoublyLinkedList::getTail() const
 {
     return tail;
 }

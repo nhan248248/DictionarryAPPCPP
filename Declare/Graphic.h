@@ -2,8 +2,10 @@
 #ifndef GRAPHIC_H
 #define GRAPHIC_H
 #include <iostream>
+#include <fstream>
 #include <windows.h>
 #include <string>
+#include <sstream>
 #include <algorithm>
 #include <conio.h>
 #include <ctype.h>

@@ -14,7 +14,10 @@ public:
     int hashFunction(const string &key);
     DoublyLinkedList* listKey();
     void insert(const Word &word);
+    void deleteKey(const string& key);
     bool keyFound(const string &nameKey);
+    void loadFromFile(const string& filename);
+    void saveToFile(const string& filename);   
 };
 
 #endif

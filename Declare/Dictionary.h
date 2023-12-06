@@ -9,7 +9,7 @@ private:
     HashTable wordTable;
 
 public:
-    Dictionary();
+    Dictionary(const string& fileName);
     ~Dictionary();
 
     // Control
@@ -18,7 +18,7 @@ public:
     void introduction();                                                                     // Giới thiệu về chương trình
     void addWord();                                                                          // Hàm thêm từ
     void update();                                                                           // Hàm sửa từ
-    void deleteWord();                                                                       // Hàm xóa từ
+    void deleteWord(const string& name);                                                     // Hàm xóa từ
     void search();                                                                           // Hàm tìm kiếm từ
     DoublyLinkedList searchInList(const string &query, DoublyLinkedList *dataList);          // Hàm trả về danh sách các từ chứa chuỗi được nhập
     void speak(const string &text);                                                          // Hàm phát âm tiếng Anh
@@ -30,7 +30,7 @@ public:
 
     // UI
     void mainBox();                                              // In khung của
-    void searchBox();                                            //
+    void searchBox();                                            // 
     short choice();                                              // Trả về button được chọn
     void createBox(short x, short y, short width, short height); // Tạo khung tứ giác
 };

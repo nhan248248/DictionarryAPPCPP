@@ -1,32 +1,8 @@
 #include "../Declare/Dictionary.h"
 
-Dictionary::Dictionary()
+Dictionary::Dictionary(const string& fileName)
 {
-    wordTable.insert(Word("Hi", "Động từ", "Xin chào", "Hi, I am Nhàn"));
-    wordTable.insert(Word("Computer", "Danh từ", "Máy tính", "I work with a computer."));
-    wordTable.insert(Word("Programming", "Danh từ", "Lập trình", "I enjoy programming."));
-    wordTable.insert(Word("Mountain", "Danh từ", "Núi", "They climbed the mountain."));
-    wordTable.insert(Word("Ocean", "Danh từ", "Đại dương", "The ocean is vast."));
-    wordTable.insert(Word("Adventure", "Danh từ", "Cuộc phiêu lưu", "They had an exciting adventure."));
-    wordTable.insert(Word("Listen", "Động từ", "Nghe", "Listen carefully to the music."));
-    wordTable.insert(Word("Garden", "Danh từ", "Vườn", "She planted flowers in the garden."));
-    wordTable.insert(Word("Incredible", "Tính từ", "Không thể tin được", "The view was incredible."));
-    wordTable.insert(Word("Apple", "Danh từ", "Quả táo", "i have an apple."));
-    wordTable.insert(Word("Work", "Động từ", "Làm việc", "i am working."));
-    wordTable.insert(Word("Word", "Danh từ", "Từ", "i am writing some words."));
-    wordTable.insert(Word("Run", "Động từ", "Chạy", "I am running on the road."));
-    wordTable.insert(Word("Cute", "Tính từ", "Dễ thương", "You are so cute!."));
-    wordTable.insert(Word("Sun", "Danh từ", "Mặt trời", "The sun is shining."));
-    wordTable.insert(Word("Moon", "Danh từ", "Mặt trăng", "The moon is full tonight."));
-    wordTable.insert(Word("River", "Danh từ", "Sông", "The river flows through the valley."));
-    wordTable.insert(Word("Forest", "Danh từ", "Rừng", "The forest is home to many animals."));
-    wordTable.insert(Word("Rain", "Danh từ", "Mưa", "I love the sound of rain."));
-    wordTable.insert(Word("Sky", "Danh từ", "Bầu trời", "The sky is clear and blue."));
-    wordTable.insert(Word("Star", "Danh từ", "Ngôi sao", "Each star in the sky is unique."));
-    wordTable.insert(Word("Wind", "Danh từ", "Gió", "The wind is blowing gently."));
-    wordTable.insert(Word("Fire", "Danh từ", "Lửa", "They gathered around the fire."));
-    wordTable.insert(Word("Book", "Danh từ", "Sách", "She enjoys reading a good book."));
-
+    wordTable.loadFromFile(fileName);
     mainMenu();
 }
 Dictionary::~Dictionary()
@@ -35,7 +11,6 @@ Dictionary::~Dictionary()
 
 void Dictionary::mainMenu()
 {
-
     short choose = choice();
     if (choose == TU_DIEN)
     {
@@ -59,11 +34,11 @@ void Dictionary::introduction()
 {
     int x = 50, y = 2;
     int choose;
-    Graphic::gotoxy(x, y - 1);
     do
     {
         Graphic::clscr();
         Graphic::setUTF8CodePage();
+        Graphic::gotoxy(x, y - 1);
         cout << "TỪ ĐIỂN ANH VIỆT";
         Graphic::gotoxy(x - 18, y + 1);
         cout << "===========================================================";
@@ -173,11 +148,8 @@ void Dictionary::dictionaryMenu()
         }
         else if (choose == KEY_DELETE)
         {
-            Graphic::clscr();
-            Graphic::displayBackgroundColor();
-            deleteWord();
-            Graphic::clscr();
-            dictionaryMenu();
+            string key = wordTable.listKey()->at(wordIndex).getName();
+            deleteWord(key);
         }
         else if (choose == KEY_SEARCH)
         {
@@ -211,13 +183,18 @@ void Dictionary::addWord()
 {
     Word word;
     string s = "";
+
     Graphic::displayBackgroundColor();
     createBox(40, 10, 40, 16);
-    Graphic::setUTF8CodePage();
+    Graphic::setUTF8CodePage();    
+    
+    Graphic::gotoxy(57, 8);
+    Graphic::setConsoleTextColor(title_Color);
+    cout << "THÊM TỪ";
     // Nhập tên từ
     do
     {
-        Graphic::gotoxy(42, 11);
+        Graphic::gotoxy(43, 11);
         Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Tên từ: ";
         Graphic::setConsoleTextColor(word_Selected_Color);
@@ -229,7 +206,7 @@ void Dictionary::addWord()
     // Nhập loại từ
     do
     {
-        Graphic::gotoxy(42, 12);
+        Graphic::gotoxy(43, 12);
         Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Loại từ: ";
         Graphic::setConsoleTextColor(word_Selected_Color);
@@ -241,7 +218,7 @@ void Dictionary::addWord()
     // Nhập nghĩa
     do
     {
-        Graphic::gotoxy(42, 13);
+        Graphic::gotoxy(43, 13);
         Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Nghĩa: ";
         Graphic::setConsoleTextColor(word_Selected_Color);
@@ -253,7 +230,7 @@ void Dictionary::addWord()
     // Nhập ví dụ
     do
     {
-        Graphic::gotoxy(42, 14);
+        Graphic::gotoxy(43, 14);
         Graphic::setConsoleTextColor(button_Choosen_Color);
         cout << "Ví dụ: ";
         Graphic::setConsoleTextColor(word_Selected_Color);
@@ -262,10 +239,27 @@ void Dictionary::addWord()
     } while (s.empty());
     word.setExample(s);
 
+
+
     if (!wordTable.keyFound(word.getName()))
     {
+        // Thêm từ vào hashtable
         wordTable.insert(word);
-        Graphic::showMessageBox("Thêm từ thành công!", "Thông báo", 0);
+
+        // Mở tệp để ghi
+        ofstream outFile("data.txt", ios::app);
+
+        if (outFile.is_open()) {
+            // Ghi thông tin từ vào tệp
+            outFile << word.getName() << "/" << word.getType() << "/" << word.getMeaning() << "/" << word.getExample() << "\n";
+
+            // Đóng tệp
+            outFile.close();
+
+            Graphic::showMessageBox("Thêm từ thành công!", "Thông báo", 0);
+        } else {
+            Graphic::showMessageBox("Lỗi khi mở tệp để ghi!", "Lỗi!!!", 0);
+        }
     }
     else
     {
@@ -290,17 +284,18 @@ void Dictionary::update()
     Graphic::setDefaultCodePage();
 }
 // 3. Chức năng Xóa
-void Dictionary::deleteWord()
+void Dictionary::deleteWord(const string& name)
 {
     Graphic::setUTF8CodePage();
     
-    Graphic::gotoxy(50, 2);
-    cout << "Hành động xoá";
-
+    wordTable.deleteKey(name);
     
     Graphic::showMessageBox("Đã xóa", "Thông báo", 0);
     Graphic::setDefaultCodePage();
 }
+
+
+
 // 4. Chức năng tìm kiếm
 
 // Hàm kiểm trả về danh sách từ chứa chuỗi được nhập vào
